@@ -2,7 +2,7 @@
 
 # Credit: Aixxe @ aixxe.net
 
-csgo_pid=$(pidof csgo_linux64)
+csgo_pid=$(pidof gmod)
 filename="libskeletux.so"
 fullpath="$(pwd)/$filename"
 echo $fullpath

@@ -34,10 +34,10 @@ inline C_CSPlayerResource** csPlayerResource;
 inline C_CSGameRules** csGameRules;
 inline IEngineVGui* engineVGui;
 inline IEngineSound* sound;
-inline ILocalize* localize;
+//inline ILocalize* localize;
 inline ICommandLine* commandline;
 inline CInput* input;
-inline IPanoramaUIEngine* panoramaEngine;
+//inline IPanoramaUIEngine* panoramaEngine;
 
 inline VMT* panelVMT;
 inline VMT* clientVMT;

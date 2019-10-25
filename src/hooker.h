@@ -37,5 +37,5 @@ namespace Hooker
 	void FindOverridePostProcessingDisable();
 	void FindSDLInput();
 	void FindSetNamedSkybox();
-	void FindPanelArrayOffset();
+//	void FindPanelArrayOffset();
 }

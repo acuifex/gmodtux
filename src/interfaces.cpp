@@ -2,9 +2,9 @@
 
 void Interfaces::FindInterfaces()
 {
-	client = GetInterface<IBaseClientDLL>("./csgo/bin/linux64/client_panorama_client.so", "VClient");
+	client = GetInterface<IBaseClientDLL>("./bin/linux64/client_client.so", "VClient");
 	engine = GetInterface<IEngineClient>("./bin/linux64/engine_client.so", "VEngineClient");
-	entityList = GetInterface<IClientEntityList>("./csgo/bin/linux64/client_panorama_client.so", "VClientEntityList");
+	entityList = GetInterface<IClientEntityList>("./bin/linux64/client_client.so", "VClientEntityList");
 	surface = GetInterface<ISurface>("./bin/linux64/vguimatsurface_client.so", "VGUI_Surface");
 	panel = GetInterface<IVPanel>("./bin/linux64/vgui2_client.so", "VGUI_Panel");
 	debugOverlay = GetInterface<IVDebugOverlay>("./bin/linux64/engine_client.so", "VDebugOverlay");
@@ -18,13 +18,13 @@ void Interfaces::FindInterfaces()
 	effects = GetInterface<CEffects>("./bin/linux64/engine_client.so", "VEngineEffects");
 	gameEvents = GetInterface<IGameEventManager2>("./bin/linux64/engine_client.so", "GAMEEVENTSMANAGER002", true);
 	physics = GetInterface<IPhysicsSurfaceProps>("./bin/linux64/vphysics_client.so", "VPhysicsSurfaceProps");
-    prediction = GetInterface<IPrediction>("./csgo/bin/linux64/client_panorama_client.so", "VClientPrediction001", true);
-	gameMovement = GetInterface<IGameMovement>("./csgo/bin/linux64/client_panorama_client.so", "GameMovement");
+    prediction = GetInterface<IPrediction>("./bin/linux64/client_client.so", "VClientPrediction001", true);
+	gameMovement = GetInterface<IGameMovement>("./bin/linux64/client_client.so", "GameMovement");
 	engineVGui = GetInterface<IEngineVGui>("./bin/linux64/engine_client.so", "VEngineVGui");
 	sound = GetInterface<IEngineSound>("./bin/linux64/engine_client.so", "IEngineSoundClient");
-	localize = GetInterface<ILocalize>("./bin/linux64/localize_client.so", "Localize_");
-	commandline = GetSymbolAddress<CommandLineFn>("./bin/linux64/libtier0_client.so", "CommandLine")();
-	panoramaEngine = GetInterface<IPanoramaUIEngine>("./bin/linux64/panorama_client.so", "PanoramaUIEngine001", true);
+//	localize = GetInterface<ILocalize>("./bin/linux64/localize_client.so", "Localize_");
+//	commandline = GetSymbolAddress<CommandLineFn>("./bin/linux64/libtier0_client.so", "CommandLine")();
+//	panoramaEngine = GetInterface<IPanoramaUIEngine>("./bin/linux64/panorama_client.so", "PanoramaUIEngine001", true);
 
 }
 

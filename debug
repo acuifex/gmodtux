@@ -2,7 +2,7 @@
 # Starts a GDB session on CS:GO, injects cheat if it is not already present.
 # Send SIGINT to CS:GO with: "kill -2 "$(pidof csgo_linux64)"".
 
-csgo_pid=$(pidof csgo_linux64)
+csgo_pid=$(pidof gmod)
 if [ -z "$csgo_pid" ]; then
     /bin/echo -e "\\e[31mCS:GO needs to be open before you can inject...\\e[0m"
     exit 1

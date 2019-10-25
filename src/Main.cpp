@@ -1,39 +1,50 @@
-#include "Main.h"
+#include <thread>
+#include <chrono>
+#include <fcntl.h>
+#include <sys/stat.h>
+#include <cstdio>
+
+#include "Hooks/hooks.h"
+#include "hooker.h"
+#include "interfaces.h"
+#include "Utils/util.h"
+#include "Utils/netvarmanager.h"
 
 void MainThread()
 {
 	Interfaces::FindInterfaces();
-	//Interfaces::DumpInterfaces();
+	Interfaces::DumpInterfaces();
 
 	Hooker::FindSetNamedSkybox();
-	Hooker::FindViewRender();
-	Hooker::FindSDLInput();
+//	Hooker::FindViewRender();
+//	Hooker::FindSDLInput();
 	Hooker::InitializeVMHooks();
 	Hooker::FindIClientMode();
 	Hooker::FindGlobalVars();
 	Hooker::FindCInput();
 	Hooker::FindPlayerResource();
-	Hooker::FindGameRules();
-	Hooker::FindPrediction();
+//	Hooker::FindGameRules();
+//	Hooker::FindPrediction();
 	Hooker::FindSurfaceDrawing();
 	Hooker::FindGetLocalClient();
 	Hooker::FindInitKeyValues();
 	Hooker::FindLoadFromBuffer();
 	//Hooker::FindVstdlibFunctions();
-	Hooker::FindOverridePostProcessingDisable();
-	Hooker::FindPanelArrayOffset();
+//	Hooker::FindOverridePostProcessingDisable();
+//	Hooker::FindPanelArrayOffset();
 
 	if( !Settings::RegisterConVars() ){
 		cvar->ConsoleDPrintf("Error making Custom ConVars! Stopping...\n");
 		return;
 	}
 
-	clientVMT->HookVM( Hooks::FrameStageNotify, 37 );
+	clientVMT->HookVM( Hooks::FrameStageNotify, 35 );
 	clientVMT->ApplyVMT();
 
-    clientModeVMT->HookVM( Hooks::ShouldDrawFog, 18 );
+//    clientModeVMT->HookVM( Hooks::ShouldDrawFog, 16 );
+    clientModeVMT->HookVM( Hooks::CreateMove, 22 );
     clientModeVMT->ApplyVMT();
-
+/*
     engineVGuiVMT->HookVM( Hooks::Paint, 15 );
     engineVGuiVMT->ApplyVMT();
 
@@ -53,9 +64,9 @@ void MainThread()
 
 	//Settings::LoadSettings();
 
-	srand(time(NULL)); // Seed random # Generator so we can call rand() later
+	srand(time(nullptr)); // Seed random # Generator so we can call rand() later*/
 
-    cvar->ConsoleColorPrintf( ColorRGBA(0, 225, 0), "\nskeletux Successfully loaded.\n" );
+    cvar->ConsoleColorPrintf( ColorRGBA(0, 225, 0), "\ngmodtux Successfully loaded.\n" );
 }
 /* Entrypoint to the Library. Called when loading */
 int __attribute__((constructor)) Startup()
@@ -71,31 +82,31 @@ int __attribute__((constructor)) Startup()
 /* Called when un-injecting the library */
 void __attribute__((destructor)) Shutdown()
 {
-	cvar->FindVar("cl_mouseenable")->SetValue(1);
+//	cvar->FindVar("cl_mouseenable")->SetValue(1);
 
 	clientVMT->ReleaseVMT();
     clientModeVMT->ReleaseVMT();
     engineVGuiVMT->ReleaseVMT();
     inputInternalVMT->ReleaseVMT();
-    launcherMgrVMT->ReleaseVMT();
+//    launcherMgrVMT->ReleaseVMT();
     materialVMT->ReleaseVMT();
     surfaceVMT->ReleaseVMT();
 
-	*s_bOverridePostProcessingDisable = false;
+//	*s_bOverridePostProcessingDisable = false;
 
 	/* Cleanup ConVars we have made */
 	for( ConVar* var : Util::createdConvars ){
 		cvar->UnregisterConCommand(var);
 	}
-    if( panoramaEngine->AccessUIEngine()->IsValidPanelPointer( GUI::skeleMain ) ){
-        GUI::skeleMain->RemoveAndDeleteChildren();
-        panorama::IUIPanel* parent = GUI::skeleMain->GetParent();
-        if( panoramaEngine->AccessUIEngine()->IsValidPanelPointer( parent ) ) {
-            parent->RemoveChild( GUI::skeleMain );
-        } else {
-            cvar->ConsoleDPrintf("ERROR unloading, panel parent is invalid!\n");
-        }
-    }
+//    if( panoramaEngine->AccessUIEngine()->IsValidPanelPointer( GUI::skeleMain ) ){
+//        GUI::skeleMain->RemoveAndDeleteChildren();
+//        panorama::IUIPanel* parent = GUI::skeleMain->GetParent();
+//        if( panoramaEngine->AccessUIEngine()->IsValidPanelPointer( parent ) ) {
+//            parent->RemoveChild( GUI::skeleMain );
+//        } else {
+//            cvar->ConsoleDPrintf("ERROR unloading, panel parent is invalid!\n");
+//        }
+//    }
 
     cvar->ConsoleColorPrintf(ColorRGBA(255, 0, 0), "skeletux unloaded successfully.\n");
 

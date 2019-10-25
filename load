@@ -1,6 +1,6 @@
 #!/bin/bash
 
-csgo_pid=$(pidof csgo_linux64)
+csgo_pid=$(pidof gmod)
 if [ -z "$csgo_pid" ]; then
     /bin/echo -e "\\e[31mCS:GO needs to be open before you can inject...\\e[0m"
     exit 1

@@ -48,7 +48,7 @@ void Hooker::InitializeVMHooks()
 	inputInternalVMT = new VMT(inputInternal);
 	materialVMT = new VMT(material);
 	surfaceVMT = new VMT(surface);
-	launcherMgrVMT = new VMT(launcherMgr);
+//	launcherMgrVMT = new VMT(launcherMgr);
 	engineVGuiVMT = new VMT(engineVGui);
 }
 
@@ -84,9 +84,8 @@ bool Hooker::HookRecvProp(const char* className, const char* propertyName, std::
 void Hooker::FindIClientMode()
 {
 	uintptr_t hudprocessinput = reinterpret_cast<uintptr_t>(getvtable(client)[10]);
-	GetClientModeFn GetClientMode = reinterpret_cast<GetClientModeFn>(GetAbsoluteAddress(hudprocessinput + 11, 1, 5));
+    clientMode = **reinterpret_cast<IClientMode***>(GetAbsoluteAddress(hudprocessinput, 3, 7));
 
-	clientMode = GetClientMode();
 	clientModeVMT = new VMT(clientMode);
 }
 
@@ -106,7 +105,7 @@ void Hooker::FindCInput()
 
 void Hooker::FindPlayerResource()
 {
-	uintptr_t instruction_addr = PatternFinder::FindPatternInModule("client_panorama_client.so",
+	uintptr_t instruction_addr = PatternFinder::FindPatternInModule("client_client.so",
 																	(unsigned char*) "\x48\x8B\x05\x00\x00\x00\x00\x55\x48\x89\xE5\x48\x85\xC0\x74\x10\x48",
 																	"xxx????xxxxxxxxxx");
 
@@ -115,7 +114,7 @@ void Hooker::FindPlayerResource()
 
 void Hooker::FindGameRules()
 {
-    uintptr_t instruction_addr = PatternFinder::FindPatternInModule("client_panorama_client.so",
+    uintptr_t instruction_addr = PatternFinder::FindPatternInModule("client_client.so",
                                                                     (unsigned char*) "\x48\x8B\x05"
                                                                                                     "\x00\x00\x00\x00"
                                                                                                     "\x48\x8B\x38\x0F\x84",
@@ -125,10 +124,10 @@ void Hooker::FindGameRules()
 }
 
 
-void Hooker::FindViewRender()
+/*void Hooker::FindViewRender()
 {
 	// 55 48 8D 15 ?? ?? ?? ?? 31 C9 48 8D 35 ?? ?? ?? ?? 48 89 E5 53 48 8D 3D ?? ?? ?? ?? 48 83 EC ?? 0F 57 C0
-	uintptr_t func_address = PatternFinder::FindPatternInModule("client_panorama_client.so",
+	uintptr_t func_address = PatternFinder::FindPatternInModule("client_client.so",
 																(unsigned char*) "\x55\x48\x8D\x15"
 																								"\x00\x00\x00\x00"
 																								"\x31\xC9\x48\x8D\x35"
@@ -141,21 +140,21 @@ void Hooker::FindViewRender()
 																"xxxx????xxxxx????xxxxxxx????xxx?xxx");
 
 	viewRender = reinterpret_cast<CViewRender*>(GetAbsoluteAddress(func_address + 294, 3, 7));
-}
+}*/
 
 void Hooker::FindPrediction()
 {
-    uintptr_t seed_instruction_addr = PatternFinder::FindPatternInModule("client_panorama_client.so",
+    uintptr_t seed_instruction_addr = PatternFinder::FindPatternInModule("client_client.so",
                                                                          (unsigned char*) "\x48\x8B\x05"
                                                                                                          "\x00\x00\x00\x00"
                                                                                                          "\x8B\x38\xE8"
                                                                                                          "\x00\x00\x00\x00"
                                                                                                          "\x89\xC7",
                                                                          "xxx????xxx????xx");
-    uintptr_t helper_instruction_addr = PatternFinder::FindPatternInModule("client_panorama_client.so",
+    uintptr_t helper_instruction_addr = PatternFinder::FindPatternInModule("client_client.so",
                                                                            (unsigned char*) "\x00\x48\x89\x3D\x00\x00\x00\x00\xC3",
                                                                            "xxxx????x");
-    uintptr_t movedata_instruction_addr = PatternFinder::FindPatternInModule("client_panorama_client.so",
+    uintptr_t movedata_instruction_addr = PatternFinder::FindPatternInModule("client_client.so",
                                                                              (unsigned char*) "\x48\x8B\x0D"
                                                                                                              "\x00\x00\x00\x00"
                                                                                                              "\x4C\x89\xEA",
@@ -187,7 +186,7 @@ void Hooker::FindGetLocalClient()
 
 void Hooker::FindInitKeyValues()
 {
-    uintptr_t func_address = PatternFinder::FindPatternInModule("client_panorama_client.so",
+    uintptr_t func_address = PatternFinder::FindPatternInModule("client_client.so",
                                                                 (unsigned char*) "\x81\x27\x00\x00\x00\xFF\x55\x31\xC0\x48\x89\xE5\x5D",
                                                                 "xxxxxxxxxxxxx");
     InitKeyValues = reinterpret_cast<InitKeyValuesFn>(func_address);
@@ -195,7 +194,7 @@ void Hooker::FindInitKeyValues()
 
 void Hooker::FindLoadFromBuffer()
 {
-    uintptr_t func_address = PatternFinder::FindPatternInModule("client_panorama_client.so",
+    uintptr_t func_address = PatternFinder::FindPatternInModule("client_client.so",
                                                                 (unsigned char*) "\x55\x48\x89\xE5\x41\x57\x41\x56\x41\x55\x41\x54\x49\x89\xD4\x53\x48\x83\xEC\x78\x48",
                                                                 "xxxxxxxxxxxxxxxxxxxxx");
     LoadFromBuffer = reinterpret_cast<LoadFromBufferFn>(func_address);
@@ -204,7 +203,7 @@ void Hooker::FindLoadFromBuffer()
 
 void Hooker::FindOverridePostProcessingDisable()
 {
-    uintptr_t bool_address = PatternFinder::FindPatternInModule("client_panorama_client.so",
+    uintptr_t bool_address = PatternFinder::FindPatternInModule("client_client.so",
                                                                 (unsigned char*) "\x80\x3D"
                                                                                                 "\x00\x00\x00\x00\x00"
                                                                                                 "\x89\xB5"
@@ -246,15 +245,15 @@ void Hooker::FindSetNamedSkybox() {
     SetNamedSkyBox = reinterpret_cast<SetNamedSkyBoxFn>(func_address);
 }
 
-void Hooker::FindPanelArrayOffset()
-{
-	/*
-	 * CUIEngine::IsValidPanelPointer()
-	 *
-	   55                      push    rbp
-	   48 81 C7 B8 01 00 00    add     rdi, 1B8h <--------
-	 */
-	uintptr_t IsValidPanelPointer = reinterpret_cast<uintptr_t>(getvtable( panoramaEngine->AccessUIEngine() )[37]);
-    int32_t offset = *(unsigned int*)(IsValidPanelPointer + 4);
-	panorama::panelArray = *(panorama::PanelArray**) ( ((uintptr_t)panoramaEngine->AccessUIEngine()) + offset + 8);
-}
+//void Hooker::FindPanelArrayOffset()
+//{
+//	/*
+//	 * CUIEngine::IsValidPanelPointer()
+//	 *
+//	   55                      push    rbp
+//	   48 81 C7 B8 01 00 00    add     rdi, 1B8h <--------
+//	 */
+//	uintptr_t IsValidPanelPointer = reinterpret_cast<uintptr_t>(getvtable( panoramaEngine->AccessUIEngine() )[37]);
+//    int32_t offset = *(unsigned int*)(IsValidPanelPointer + 4);
+//	panorama::panelArray = *(panorama::PanelArray**) ( ((uintptr_t)panoramaEngine->AccessUIEngine()) + offset + 8);
+//}
