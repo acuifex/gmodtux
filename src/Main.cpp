@@ -41,7 +41,7 @@ void MainThread()
 	clientVMT->HookVM( Hooks::FrameStageNotify, 35 );
 	clientVMT->ApplyVMT();
 
-//    clientModeVMT->HookVM( Hooks::ShouldDrawFog, 16 );
+    clientModeVMT->HookVM( Hooks::ShouldDrawFog, 16 );
     clientModeVMT->HookVM( Hooks::CreateMove, 22 );
     clientModeVMT->ApplyVMT();
 /*

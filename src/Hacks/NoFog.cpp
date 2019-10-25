@@ -5,7 +5,7 @@ typedef bool (* ShouldDrawFogFn)( void* );
 bool NoFog::ShouldDrawFog( void *thisptr ) {
     bool state = (bool)cvar->FindVar( "skele_disable_fog" )->GetInt();
     if( !state )
-        return clientModeVMT->GetOriginalMethod<ShouldDrawFogFn>( 18 )( thisptr );
+        return clientModeVMT->GetOriginalMethod<ShouldDrawFogFn>( 16 )( thisptr );
 
     /* Skybox Fog is separate */
     IMatRenderContext* renderCtx = material->GetRenderContext();

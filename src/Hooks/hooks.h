@@ -9,7 +9,7 @@
 typedef void (*FrameStageNotifyFn) (void*, ClientFrameStage_t);
 typedef void (*SetKeyCodeStateFn) (void*, ButtonCode_t, bool);
 typedef void (*BeginFrameFn) (void*, float);
-typedef void (*CreateMoveFn) (void*, float, CUserCmd*);
+typedef bool (*CreateMoveFn) (void*, float, CUserCmd*);
 typedef void (*PaintFn) (void*, PaintMode_t);
 typedef void (*LockCursorFn) (void*);
 

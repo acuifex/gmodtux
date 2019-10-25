@@ -3,7 +3,7 @@
 
 bool Hooks::CreateMove(void* thisptr, float flInputSampleTime, CUserCmd* cmd)
 {
-    materialVMT->GetOriginalMethod<CreateMoveFn>(22)(thisptr, flInputSampleTime, cmd);
+    clientModeVMT->GetOriginalMethod<CreateMoveFn>(22)(thisptr, flInputSampleTime, cmd);
 
     if (cmd && cmd->command_number)
     {
