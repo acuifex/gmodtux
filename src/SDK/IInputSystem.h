@@ -249,11 +249,10 @@ enum MouseCodeState_t
 
 struct CUserCmd
 {
-	virtual ~CUserCmd() {};
+//	virtual ~CUserCmd() {}; // https://www.unknowncheats.me/forum/garry-s-mod/263901-19-02-26-cusercmd.html
 	int command_number;
 	int tick_count;
 	QAngle viewangles;
-	QAngle aimdirection;
 	float forwardmove;
 	float sidemove;
 	float upmove;
@@ -265,8 +264,6 @@ struct CUserCmd
 	short mousedx;
 	short mousedy;
 	bool hasbeenpredicted;
-	QAngle headangles;
-	Vector headoffset;
 };
 
 class IInputSystem : public IAppSystem

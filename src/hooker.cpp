@@ -180,8 +180,10 @@ void Hooker::FindSurfaceDrawing()
 
 void Hooker::FindGetLocalClient()
 {
-	uintptr_t GetLocalPlayer = reinterpret_cast<uintptr_t>(getvtable(engine)[12]);
-	GetLocalClient = reinterpret_cast<GetLocalClientFn>(GetAbsoluteAddress(GetLocalPlayer + 9, 1, 5));
+//	uintptr_t GetLocalPlayer = reinterpret_cast<uintptr_t>(getvtable(engine)[12]);
+//	GetLocalClient = reinterpret_cast<GetLocalClientFn>(GetAbsoluteAddress(GetLocalPlayer + 9, 1, 5));
+    uintptr_t func_address = reinterpret_cast<uintptr_t>(getvtable(engine)[12]);
+	GetLocalClient = reinterpret_cast<GetLocalClientFn>(func_address);
 }
 
 void Hooker::FindInitKeyValues()

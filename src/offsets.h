@@ -30,6 +30,7 @@ struct COffsets
 		std::ptrdiff_t m_vecOrigin;
 		std::ptrdiff_t m_nRenderMode;
 		std::ptrdiff_t m_iTeamNum;
+		std::ptrdiff_t m_iParentAttachment;
 		std::ptrdiff_t m_MoveType;
 		std::ptrdiff_t m_Collision;
 		std::ptrdiff_t m_bSpotted;

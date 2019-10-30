@@ -1,5 +1,6 @@
 #include "hooks.h"
 
+#include "../Hacks/bhop.h"
 
 bool Hooks::CreateMove(void* thisptr, float flInputSampleTime, CUserCmd* cmd)
 {
@@ -7,6 +8,6 @@ bool Hooks::CreateMove(void* thisptr, float flInputSampleTime, CUserCmd* cmd)
 
     if (cmd && cmd->command_number)
     {
-        cvar->ConsoleDPrintf("test\n");
+        BHop::CreateMove(cmd);
     }
 }

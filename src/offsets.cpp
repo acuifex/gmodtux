@@ -27,7 +27,8 @@ void Offsets::GetOffsets()
 	offsets.DT_BaseEntity.m_vecOrigin = NetVarManager::GetOffset(tables, "DT_BaseEntity", "m_vecOrigin");
 	offsets.DT_BaseEntity.m_nRenderMode = NetVarManager::GetOffset(tables, "DT_BaseEntity", "m_nRenderMode");
 	offsets.DT_BaseEntity.m_iTeamNum = NetVarManager::GetOffset(tables, "DT_BaseEntity", "m_iTeamNum");
-	offsets.DT_BaseEntity.m_MoveType = offsets.DT_BaseEntity.m_nRenderMode + 1;
+	offsets.DT_BaseEntity.m_iParentAttachment = NetVarManager::GetOffset(tables, "DT_BaseEntity", "m_iParentAttachment");
+	offsets.DT_BaseEntity.m_MoveType = offsets.DT_BaseEntity.m_iParentAttachment - 2;
 	offsets.DT_BaseEntity.m_Collision = NetVarManager::GetOffset(tables, "DT_BaseEntity", "m_Collision");
 	offsets.DT_BaseEntity.m_bSpotted = NetVarManager::GetOffset(tables, "DT_BaseEntity", "m_bSpotted");
 

@@ -58,13 +58,14 @@ void MainThread()
 
 	surfaceVMT->HookVM( Hooks::LockCursor, 67 );
 	surfaceVMT->ApplyVMT();
+*/
 
-	//NetVarManager::DumpNetvars();
+	NetVarManager::DumpNetvars();
 	Offsets::GetOffsets();
 
 	//Settings::LoadSettings();
 
-	srand(time(nullptr)); // Seed random # Generator so we can call rand() later*/
+	srand(time(nullptr)); // Seed random # Generator so we can call rand() later
 
     cvar->ConsoleColorPrintf( ColorRGBA(0, 225, 0), "\ngmodtux Successfully loaded.\n" );
 }

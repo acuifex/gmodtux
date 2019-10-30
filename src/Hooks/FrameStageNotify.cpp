@@ -3,7 +3,7 @@
 
 void Hooks::FrameStageNotify(void* thisptr, ClientFrameStage_t stage)
 {
-	SkyBox::FrameStageNotify( stage );
+//	SkyBox::FrameStageNotify( stage );
 
 	clientVMT->GetOriginalMethod<FrameStageNotifyFn>(35)(thisptr, stage);
 }
