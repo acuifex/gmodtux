@@ -192,11 +192,6 @@ public:
 	{
 		return (ICollideable*)((uintptr_t)this + offsets.DT_BaseEntity.m_Collision);
 	}
-
-	bool* GetSpotted()
-	{
-		return (bool*)((uintptr_t)this + offsets.DT_BaseEntity.m_bSpotted);
-	}
 };
 
 /* generic game classes */
@@ -225,7 +220,7 @@ public:
 
 	Vector GetVelocity()
 	{
-		return *(Vector*)((uintptr_t)this + offsets.DT_BasePlayer.m_vecVelocity);
+		return *(Vector*)((uintptr_t)this + (offsets.DT_BasePlayer.m_vecVelocity / 2)); // FIXME
 	}
 
 	int GetHealth()
@@ -273,11 +268,6 @@ public:
 		return (QAngle*)((uintptr_t)this + offsets.DT_CSPlayer.m_angEyeAngles[0]);
 	}
 
-	int GetMoney()
-	{
-		return *(int*)((uintptr_t)this + offsets.DT_CSPlayer.m_iAccount);
-	}
-
 	int GetHits()
 	{
 		return *(int*)((uintptr_t)this + offsets.DT_CSPlayer.m_totalHitsOnServer);
@@ -286,11 +276,6 @@ public:
 	int GetArmor()
 	{
 		return *(int*)((uintptr_t)this + offsets.DT_CSPlayer.m_ArmorValue);
-	}
-
-	int HasDefuser()
-	{
-		return *(int*)((uintptr_t)this + offsets.DT_CSPlayer.m_bHasDefuser);
 	}
 
 	bool IsDefusing()
@@ -313,29 +298,9 @@ public:
 		return *(bool*)((uintptr_t)this + offsets.DT_CSPlayer.m_bGunGameImmunity);
 	}
 
-	bool IsRescuing()
-	{
-		return *(bool*)((uintptr_t)this + offsets.DT_CSPlayer.m_bIsRescuing);
-	}
-
 	int HasHelmet()
 	{
 		return *(int*)((uintptr_t)this + offsets.DT_CSPlayer.m_bHasHelmet);
-	}
-
-	float GetFlashBangTime()
-	{
-		return *(float*)((uintptr_t)this + 0xABC4);
-	}
-
-	float GetFlashDuration()
-	{
-		return *(float*)((uintptr_t)this + offsets.DT_CSPlayer.m_flFlashDuration);
-	}
-
-	float* GetFlashMaxAlpha()
-	{
-		return (float*)((uintptr_t)this + offsets.DT_CSPlayer.m_flFlashMaxAlpha);
 	}
 
 	float* GetLowerBodyYawTarget()
@@ -386,78 +351,15 @@ public:
 	}
 };
 
-class C_PlantedC4 : public C_BaseEntity
-{
-public:
-	bool IsBombTicking()
-	{
-		return (bool)((uintptr_t)this + offsets.DT_PlantedC4.m_bBombTicking);
-	}
-
-	float GetBombTime()
-	{
-		return *(float*)((uintptr_t)this + offsets.DT_PlantedC4.m_flC4Blow);
-	}
-
-	bool IsBombDefused()
-	{
-		return *(bool*)((uintptr_t)this + offsets.DT_PlantedC4.m_bBombDefused);
-	}
-
-	int GetBombDefuser()
-	{
-		return *(int*)((uintptr_t)this + offsets.DT_PlantedC4.m_hBombDefuser);
-	}
-};
-
 class C_BaseAttributableItem : public C_BaseEntity
 {
 public:
-	ItemDefinitionIndex* GetItemDefinitionIndex()
-	{
-		return (ItemDefinitionIndex*)((uintptr_t)this + offsets.DT_BaseAttributableItem.m_iItemDefinitionIndex);
-	}
-
-	int* GetItemIDHigh()
-	{
-		return (int*)((uintptr_t)this + offsets.DT_BaseAttributableItem.m_iItemIDHigh);
-	}
-
-	int* GetEntityQuality()
-	{
-		return (int*)((uintptr_t)this + offsets.DT_BaseAttributableItem.m_iEntityQuality);
-	}
-
-	char* GetCustomName()
-	{
-		return (char*)((uintptr_t)this + offsets.DT_BaseAttributableItem.m_szCustomName);
-	}
-
-	int* GetFallbackPaintKit()
-	{
-		return (int*)((uintptr_t)this + offsets.DT_BaseAttributableItem.m_nFallbackPaintKit);
-	}
-
-	int* GetFallbackSeed()
-	{
-		return (int*)((uintptr_t)this + offsets.DT_BaseAttributableItem.m_nFallbackSeed);
-	}
-
-	float* GetFallbackWear()
-	{
-		return (float*)((uintptr_t)this + offsets.DT_BaseAttributableItem.m_flFallbackWear);
-	}
-
-	int* GetFallbackStatTrak()
-	{
-		return (int*)((uintptr_t)this + offsets.DT_BaseAttributableItem.m_nFallbackStatTrak);
-	}
-
-	int* GetAccountID()
-	{
-		return (int*)((uintptr_t)this + offsets.DT_BaseAttributableItem.m_iAccountID);
-	}
+    ItemDefinitionIndex* GetItemDefinitionIndex()
+    {
+        return (ItemDefinitionIndex*)((uintptr_t)this + offsets.DT_TEHL2MPFireBullets.m_iWeaponIndex);
+    }
 };
+
 
 class C_BaseViewModel: public C_BaseEntity
 {
@@ -574,11 +476,11 @@ public:
 	}
     char* GetTracerEffect()
     {
-        return *(char**)((uintptr_t)this + 0x280);
+        return *(char**)((uintptr_t)this + 0x278);
     }
     int* GetTracerFrequency()
     {
-        return (int*)((uintptr_t)this + 0x28C);
+        return (int*)((uintptr_t)this + 0x280);
     }
 };
 
@@ -634,47 +536,5 @@ public:
 	{
 		typedef void (* oUpdateAccuracyPenalty)(void*);
 		return getvfunc<oUpdateAccuracyPenalty>(this, 540)(this);
-	}
-};
-
-class C_WeaponC4 : C_BaseCombatWeapon
-{
-public:
-	bool GetStartedArming()
-	{
-		return *(bool*)((uintptr_t)this + offsets.DT_WeaponC4.m_bStartedArming);
-	}
-};
-
-class C_Chicken : C_BaseEntity
-{
-public:
-	bool* GetShouldGlow()
-	{
-		return (bool*)((uintptr_t)this + offsets.DT_DynamicProp.m_bShouldGlow);
-	}
-};
-
-class C_BaseCSGrenade : C_BaseCombatWeapon
-{
-public:
-	bool IsHeldByPlayer()
-	{
-		return *(bool*)((uintptr_t)this + offsets.DT_BaseCSGrenade.m_bIsHeldByPlayer);
-	}
-
-	bool GetPinPulled()
-	{
-		return *(bool*)((uintptr_t)this + offsets.DT_BaseCSGrenade.m_bPinPulled);
-	}
-
-	float GetThrowTime()
-	{
-		return *(float*)((uintptr_t)this + offsets.DT_BaseCSGrenade.m_fThrowTime);
-	}
-
-	float GetThrowStrength()
-	{
-		return *(float*)((uintptr_t)this + offsets.DT_BaseCSGrenade.m_flThrowStrength);
 	}
 };

@@ -22,14 +22,12 @@ void MainThread()
 	Hooker::FindIClientMode();
 	Hooker::FindGlobalVars();
 	Hooker::FindCInput();
-	Hooker::FindPlayerResource();
-//	Hooker::FindGameRules();
 //	Hooker::FindPrediction();
 	Hooker::FindSurfaceDrawing();
 	Hooker::FindGetLocalClient();
 	Hooker::FindInitKeyValues();
 	Hooker::FindLoadFromBuffer();
-	//Hooker::FindVstdlibFunctions();
+	Hooker::FindVstdlibFunctions();
 //	Hooker::FindOverridePostProcessingDisable();
 //	Hooker::FindPanelArrayOffset();
 
@@ -45,12 +43,15 @@ void MainThread()
     clientModeVMT->HookVM( Hooks::CreateMove, 22 );
     clientModeVMT->ApplyVMT();
 /*
-    engineVGuiVMT->HookVM( Hooks::Paint, 15 );
+    engineVGuiVMT->HookVM( Hooks::Paint, 14 );
     engineVGuiVMT->ApplyVMT();
 
-    inputInternalVMT->HookVM( Hooks::SetKeyCodeState, 92 );
+	inputInternalVMT->HookVM( Hooks::SetMouseCodeState, 83);
+	inputInternalVMT->HookVM( Hooks::SetKeyCodeState, 84);
     inputInternalVMT->ApplyVMT();
 
+    launcherMgrVMT->HookVM( Hooks::PumpWindowsMessageLoop, 15);
+    launcherMgrVMT->HookVM( Hooks::ShowPixels, 29);
     launcherMgrVMT->ApplyVMT();
 
 	materialVMT->HookVM( Hooks::BeginFrame, 42 );

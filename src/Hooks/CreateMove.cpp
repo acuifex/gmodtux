@@ -1,6 +1,7 @@
 #include "hooks.h"
 
 #include "../Hacks/bhop.h"
+#include "../Hacks/autostrafe.h"
 
 bool Hooks::CreateMove(void* thisptr, float flInputSampleTime, CUserCmd* cmd)
 {
@@ -9,5 +10,6 @@ bool Hooks::CreateMove(void* thisptr, float flInputSampleTime, CUserCmd* cmd)
     if (cmd && cmd->command_number)
     {
         BHop::CreateMove(cmd);
+        AutoStrafe::CreateMove(cmd);
     }
 }

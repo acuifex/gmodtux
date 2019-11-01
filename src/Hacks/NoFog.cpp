@@ -8,9 +8,9 @@ bool NoFog::ShouldDrawFog( void *thisptr ) {
         return clientModeVMT->GetOriginalMethod<ShouldDrawFogFn>( 16 )( thisptr );
 
     /* Skybox Fog is separate */
-    IMatRenderContext* renderCtx = material->GetRenderContext();
-    renderCtx->FogMode( MaterialFogMode_t::MATERIAL_FOG_NONE );
-    renderCtx->Release();
+    // IMatRenderContext* renderCtx = material->GetRenderContext();
+    // renderCtx->FogMode( MaterialFogMode_t::MATERIAL_FOG_NONE );
+    // renderCtx->Release();
     /* Return false for normal fog */
     return false; // uhhh, no Sweetie, don't draw that fog.
 }

@@ -13,6 +13,15 @@
 #include "Utils/util.h"
 #include "Utils/util_sdk.h"
 
+enum class AutostrafeType : int
+{
+    AS_FORWARDS,
+    AS_BACKWARDS,
+    AS_LEFTSIDEWAYS,
+    AS_RIGHTSIDEWAYS,
+    AS_RAGE,
+};
+
 namespace Settings
 {
 

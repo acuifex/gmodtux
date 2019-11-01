@@ -26,14 +26,13 @@ namespace Hooker
 	void FindIClientMode();
 	void FindGlobalVars();
 	void FindCInput();
-	void FindPlayerResource();
-	void FindGameRules();
 	void FindViewRender();
 	void FindPrediction();
 	void FindSurfaceDrawing();
 	void FindGetLocalClient();
 	void FindInitKeyValues();
 	void FindLoadFromBuffer();
+    void FindVstdlibFunctions();
 	void FindOverridePostProcessingDisable();
 	void FindSDLInput();
 	void FindSetNamedSkybox();

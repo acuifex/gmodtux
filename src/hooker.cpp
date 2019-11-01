@@ -103,27 +103,6 @@ void Hooker::FindCInput()
 	input = **reinterpret_cast<CInput***>(GetAbsoluteAddress(IN_ActivateMouse, 3, 7));
 }
 
-void Hooker::FindPlayerResource()
-{
-	uintptr_t instruction_addr = PatternFinder::FindPatternInModule("client_client.so",
-																	(unsigned char*) "\x48\x8B\x05\x00\x00\x00\x00\x55\x48\x89\xE5\x48\x85\xC0\x74\x10\x48",
-																	"xxx????xxxxxxxxxx");
-
-	csPlayerResource = reinterpret_cast<C_CSPlayerResource**>(GetAbsoluteAddress(instruction_addr, 3, 7));
-}
-
-void Hooker::FindGameRules()
-{
-    uintptr_t instruction_addr = PatternFinder::FindPatternInModule("client_client.so",
-                                                                    (unsigned char*) "\x48\x8B\x05"
-                                                                                                    "\x00\x00\x00\x00"
-                                                                                                    "\x48\x8B\x38\x0F\x84",
-                                                                    "xxx????xxxxx");
-
-    csGameRules = *reinterpret_cast<C_CSGameRules***>(GetAbsoluteAddress(instruction_addr, 3, 7));
-}
-
-
 /*void Hooker::FindViewRender()
 {
 	// 55 48 8D 15 ?? ?? ?? ?? 31 C9 48 8D 35 ?? ?? ?? ?? 48 89 E5 53 48 8D 3D ?? ?? ?? ?? 48 83 EC ?? 0F 57 C0
@@ -202,6 +181,18 @@ void Hooker::FindLoadFromBuffer()
     LoadFromBuffer = reinterpret_cast<LoadFromBufferFn>(func_address);
 }
 
+void Hooker::FindVstdlibFunctions()
+{
+    void* handle = dlopen("./bin/linux64/libvstdlib_client.so", RTLD_NOLOAD | RTLD_NOW);
+
+    RandomSeed = reinterpret_cast<RandomSeedFn>(dlsym(handle, "RandomSeed"));
+    RandomFloat = reinterpret_cast<RandomFloatFn>(dlsym(handle, "RandomFloat"));
+    RandomFloatExp = reinterpret_cast<RandomFloatExpFn>(dlsym(handle, "RandomFloatExp"));
+    RandomInt = reinterpret_cast<RandomIntFn>(dlsym(handle, "RandomInt"));
+    RandomGaussianFloat = reinterpret_cast<RandomGaussianFloatFn>(dlsym(handle, "RandomGaussianFloat"));
+
+    dlclose(handle);
+}
 
 void Hooker::FindOverridePostProcessingDisable()
 {

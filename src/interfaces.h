@@ -30,8 +30,6 @@ inline IPrediction* prediction;
 inline IGameMovement* gameMovement;
 inline IMoveHelper* moveHelper;
 inline ILauncherMgr* launcherMgr;
-inline C_CSPlayerResource** csPlayerResource;
-inline C_CSGameRules** csGameRules;
 inline IEngineVGui* engineVGui;
 inline IEngineSound* sound;
 //inline ILocalize* localize;
@@ -50,6 +48,12 @@ inline VMT* engineVGuiVMT;
 
 inline InitKeyValuesFn InitKeyValues;
 inline LoadFromBufferFn LoadFromBuffer;
+
+inline RandomSeedFn RandomSeed;
+inline RandomFloatFn RandomFloat;
+inline RandomFloatExpFn RandomFloatExp;
+inline RandomIntFn RandomInt;
+inline RandomGaussianFloatFn RandomGaussianFloat;
 
 inline SetNamedSkyBoxFn SetNamedSkyBox;
 

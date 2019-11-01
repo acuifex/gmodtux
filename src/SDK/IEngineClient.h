@@ -51,19 +51,19 @@ public:
 	void GetViewAngles(QAngle& angle)
 	{
 		typedef void (* oGetViewAngles)(void*, QAngle&);
-		return getvfunc<oGetViewAngles>(this, 18)(this, angle);
+		return getvfunc<oGetViewAngles>(this, 19)(this, angle);
 	}
 
 	void SetViewAngles(QAngle& angle)
 	{
 		typedef void (* oSetViewAngles)(void*, QAngle&);
-		return getvfunc<oSetViewAngles>(this, 19)(this, angle);
+		return getvfunc<oSetViewAngles>(this, 20)(this, angle);
 	}
 
 	int GetMaxClients()
 	{
 		typedef int (* oGetMaxClients)(void*);
-		return getvfunc<oGetMaxClients>(this, 20)(this);
+		return getvfunc<oGetMaxClients>(this, 21)(this);
 	}
 
 	bool IsInGame()
@@ -75,18 +75,18 @@ public:
 	bool IsTakingScreenshot()
 	{
 		typedef bool (* oIsTakingScreenshot)(void*);
-		return getvfunc<oIsTakingScreenshot>(this, 92)(this);
+		return getvfunc<oIsTakingScreenshot>(this, 85)(this);
 	}
 
 	void ExecuteClientCmd(const char* szCmdString)
 	{
 		typedef void (* oExecuteClientCmd)(void*, const char*);
-		return getvfunc<oExecuteClientCmd>(this, 108)(this, szCmdString);
+		return getvfunc<oExecuteClientCmd>(this, 102)(this, szCmdString);
 	}
 
 	void ClientCmd_Unrestricted(const char* szCmdString)
 	{
 		typedef void (* oClientCmd_Unrestricted)(void*, const char*);
-		return getvfunc<oClientCmd_Unrestricted>(this, 113)(this, szCmdString);
+		return getvfunc<oClientCmd_Unrestricted>(this, 106)(this, szCmdString);
 	}
 };
