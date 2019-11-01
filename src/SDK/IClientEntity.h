@@ -354,10 +354,10 @@ public:
 class C_BaseAttributableItem : public C_BaseEntity
 {
 public:
-    ItemDefinitionIndex* GetItemDefinitionIndex()
+/*    ItemDefinitionIndex* GetItemDefinitionIndex()
     {
         return (ItemDefinitionIndex*)((uintptr_t)this + offsets.DT_TEHL2MPFireBullets.m_iWeaponIndex);
-    }
+    }*/
 };
 
 

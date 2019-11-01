@@ -1,7 +1,8 @@
 #include "hooks.h"
 #include "../ImGUI/imgui.h"
 #include "../ImGUI/imgui_impl_sdl.h"
-#include "../ATGUI/SegoeUI.h"
+#include "../GTGUI/SegoeUI.h"
+
 
 void Hooks::ShowPixels(void *thisptr, CShowPixelsParams *params)
 {

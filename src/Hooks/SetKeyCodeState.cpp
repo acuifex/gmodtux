@@ -2,8 +2,10 @@
 
 void Hooks::SetKeyCodeState(void* thisptr, ButtonCode_t code, bool bPressed)
 {
-	if( !bPressed )
-		return inputInternalVMT->GetOriginalMethod<SetKeyCodeStateFn>(92)(thisptr, code, bPressed);
+
+    if( code == KEY_INSERT && !bPressed ){
+        UI::SetVisible(!UI::isVisible);
+    }
 
 	switch( code ){
 		case ButtonCode_t::KEY_INSERT:
@@ -20,4 +22,5 @@ void Hooks::SetKeyCodeState(void* thisptr, ButtonCode_t code, bool bPressed)
         default:
             break;
 	}
+    inputInternalVMT->GetOriginalMethod<SetKeyCodeStateFn>(84)(thisptr, code, bPressed);
 }

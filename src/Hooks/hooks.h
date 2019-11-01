@@ -4,6 +4,7 @@
 #include "../interfaces.h"
 #include "../hooker.h"
 #include "../Hacks/NoFog.h"
+#include "../GTGUI/gtgui.h"
 
 
 typedef void (*FrameStageNotifyFn) (void*, ClientFrameStage_t);
@@ -12,6 +13,7 @@ typedef void (*BeginFrameFn) (void*, float);
 typedef bool (*CreateMoveFn) (void*, float, CUserCmd*);
 typedef void (*PaintFn) (void*, PaintMode_t);
 typedef void (*LockCursorFn) (void*);
+typedef void (*ShowPixelsFn) (void*, CShowPixelsParams*);
 
 
 namespace Hooks
@@ -25,6 +27,7 @@ namespace Hooks
 	void LockCursor(void* thisptr);
 
 	void Paint(void* thisptr, PaintMode_t mode);
+    void ShowPixels(void *thisptr, CShowPixelsParams *params);
 }
 
 namespace CreateMove
