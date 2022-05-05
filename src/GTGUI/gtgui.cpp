@@ -8,7 +8,8 @@ ColorVar Settings::UI::mainColor = ImColor(216, 157, 116, 255);
 ColorVar Settings::UI::bodyColor = ImColor(240, 240, 240, 200);
 ColorVar Settings::UI::fontColor = ImColor(0, 0, 0, 255);
 ColorVar Settings::UI::accentColor = ImColor(87, 84, 83, 155);
-/* Window Position/Size Defaults */
+// Window Position/Size Defaults
+
 int Settings::UI::Windows::Main::sizeX = 960;
 int Settings::UI::Windows::Main::sizeY = 645;
 int Settings::UI::Windows::Main::posX = 20;
@@ -48,7 +49,7 @@ void UI::WaterMark( )
     if (UI::isVisible)
         return;
 
-    Draw::ImDrawText(ImVec2(4.f, 4.f), ImColor(255, 255, 255, 255), "Kisak's Mod", NULL, 0.0f, NULL, ImFontFlags_Shadow);
+    Draw::ImText(ImVec2(4.f, 4.f), ImColor(255, 255, 255, 255), "gmodtux", NULL, 0.0f, NULL, ImFontFlags_Shadow);
 }
 
 void UI::SetVisible(bool visible)

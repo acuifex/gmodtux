@@ -32,6 +32,7 @@ inline IMoveHelper* moveHelper;
 inline ILauncherMgr* launcherMgr;
 inline IEngineVGui* engineVGui;
 inline IEngineSound* sound;
+inline CLuaShared* luaShared;
 //inline ILocalize* localize;
 inline ICommandLine* commandline;
 inline CInput* input;
@@ -57,9 +58,18 @@ inline RandomGaussianFloatFn RandomGaussianFloat;
 
 inline SetNamedSkyBoxFn SetNamedSkyBox;
 
+inline luaL_loadfileFn luaL_loadfile;
+inline lua_pcallFn lua_pcall;
+
 inline int* nPredictionRandomSeed;
 inline CMoveData* g_MoveData;
 inline bool* s_bOverridePostProcessingDisable;
+
+extern uintptr_t oSwapWindow;
+extern uintptr_t* swapWindowJumpAddress;
+
+extern uintptr_t oPollEvent;
+extern uintptr_t* polleventJumpAddress;
 
 namespace Interfaces
 {

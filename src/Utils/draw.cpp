@@ -1,5 +1,9 @@
 #include "draw.h"
 
+
+std::deque<DrawRequest> Draw::drawRequests = {};
+std::mutex Draw::m_draw;
+
 void Draw::Circle(Vector2D position, float points, float radius, Color color)
 {
     float step = (float)M_PI * 2.0f / points;
@@ -170,47 +174,184 @@ HFont Draw::CreateFont(const char* fontName, int size, int flag)
     return newFont;
 }
 
-void Draw::ImStart()
-{
-    int width, height;
-    SDL_GetWindowSize(SDL_GL_GetCurrentWindow(), &width, &height);
 
-    ImGui::SetNextWindowPos(ImVec2(0, 0), ImGuiSetCond_Always);
-    ImGui::SetNextWindowSize(ImVec2(width, height), ImGuiSetCond_Always);
-    ImGui::Begin("",
-                 (bool*)true,
-                 ImVec2(width, height),
-                 0.f,
-                 ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoInputs);
+void Draw::ImStart() {
+    int width, height;
+    SDL_GetWindowSize( SDL_GL_GetCurrentWindow(), &width, &height );
+
+    ImGui::SetNextWindowPos( ImVec2( 0, 0 ), ImGuiSetCond_Always );
+    ImGui::SetNextWindowSize( ImVec2( width, height ), ImGuiSetCond_Always );
+    ImGui::Begin( "",
+                  ( bool* ) true,
+                  ImVec2( width, height ),
+                  0.f,
+                  ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove |
+                  ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoInputs );
 }
 
-void Draw::ImDrawText(ImVec2 pos, ImColor color, const char* text_begin, const char* text_end, float wrap_width, const ImVec4* cpu_fine_clip_rect, ImFontFlags flags)
-{
-    if (flags & ImFontFlags_Outline)
-    {
-        ImGui::GetWindowDrawList()->AddText(ImGui::GetWindowFont(), ImGui::GetWindowFontSize(), ImVec2(pos.x - 1, pos.y - 1), ImColor(0, 0, 0, 255), text_begin, text_end, wrap_width, cpu_fine_clip_rect);
-        ImGui::GetWindowDrawList()->AddText(ImGui::GetWindowFont(), ImGui::GetWindowFontSize(), ImVec2(pos.x + 2, pos.y), ImColor(0, 0, 0, 255), text_begin, text_end, wrap_width, cpu_fine_clip_rect);
-        ImGui::GetWindowDrawList()->AddText(ImGui::GetWindowFont(), ImGui::GetWindowFontSize(), ImVec2(pos.x, pos.y + 2), ImColor(0, 0, 0, 255), text_begin, text_end, wrap_width, cpu_fine_clip_rect);
-        ImGui::GetWindowDrawList()->AddText(ImGui::GetWindowFont(), ImGui::GetWindowFontSize(), ImVec2(pos.x - 2, pos.y), ImColor(0, 0, 0, 255), text_begin, text_end, wrap_width, cpu_fine_clip_rect);
+void Draw::ImText( ImVec2 pos, ImColor color, const char* text_begin, const char* text_end, float wrap_width,
+                   const ImVec4* cpu_fine_clip_rect, ImFontFlags flags ) {
+    ImColor shading;
+    shading.Value.x = 0;
+    shading.Value.y = 0;
+    shading.Value.z = 0;
+    shading.Value.w = color.Value.w / 2;
+
+    if ( flags & ImFontFlags_Outline ) {
+        ImGui::GetWindowDrawList()->AddText( ImGui::GetFont(), ImGui::GetFontSize(), ImVec2( pos.x - 1, pos.y - 1 ),
+                                             shading, text_begin, text_end, wrap_width,
+                                             cpu_fine_clip_rect );
+        ImGui::GetWindowDrawList()->AddText( ImGui::GetFont(), ImGui::GetFontSize(), ImVec2( pos.x + 2, pos.y ),
+                                             shading, text_begin, text_end, wrap_width,
+                                             cpu_fine_clip_rect );
+        ImGui::GetWindowDrawList()->AddText( ImGui::GetFont(), ImGui::GetFontSize(), ImVec2( pos.x, pos.y + 2 ),
+                                             shading, text_begin, text_end, wrap_width,
+                                             cpu_fine_clip_rect );
+        ImGui::GetWindowDrawList()->AddText( ImGui::GetFont(), ImGui::GetFontSize(), ImVec2( pos.x - 2, pos.y ),
+                                             shading, text_begin, text_end, wrap_width,
+                                             cpu_fine_clip_rect );
     }
 
-    if (flags & ImFontFlags_Shadow)
-        ImGui::GetWindowDrawList()->AddText(ImGui::GetWindowFont(), ImGui::GetWindowFontSize(), ImVec2(pos.x + 1, pos.y + 1), ImColor(0, 0, 0, 255), text_begin, text_end, wrap_width, cpu_fine_clip_rect);
+    if ( flags & ImFontFlags_Shadow )
+        ImGui::GetWindowDrawList()->AddText( ImGui::GetFont(), ImGui::GetFontSize(), ImVec2( pos.x + 1, pos.y + 1 ),
+                                             shading, text_begin, text_end, wrap_width,
+                                             cpu_fine_clip_rect );
 
-    ImGui::GetWindowDrawList()->AddText(ImGui::GetWindowFont(), ImGui::GetWindowFontSize(), pos, color, text_begin, text_end, wrap_width, cpu_fine_clip_rect);
+    ImGui::GetWindowDrawList()->AddText( ImGui::GetFont(), ImGui::GetFontSize(), pos, color, text_begin, text_end,
+                                         wrap_width, cpu_fine_clip_rect );
 }
 
-void Draw::ImDrawCircle(ImVec2 point, ImColor color, float radius, int num_segments, float thickness)
-{
-    ImGui::GetWindowDrawList()->AddCircle(point, radius, color, num_segments, thickness);
+void Draw::ImCircle( ImVec2 point, ImColor color, float radius, int num_segments, float thickness ) {
+    ImGui::GetWindowDrawList()->AddCircle( point, radius, color, num_segments, thickness );
 }
 
-void Draw::ImDrawRect(ImVec2 a, ImVec2 b, ImColor color, float rounding, int rounding_corners_flags, float thickness)
-{
-    ImGui::GetWindowDrawList()->AddRect(a, b, color, rounding, rounding_corners_flags, thickness);
+void Draw::ImCircleFilled( ImVec2 point, ImColor color, float radius, int num_segments ) {
+    ImGui::GetWindowDrawList()->AddCircleFilled( point, radius, color, num_segments );
 }
 
-void Draw::ImEnd()
-{
+void Draw::ImRect( ImVec2 a, ImVec2 b, ImColor color, float rounding, int rounding_corners_flags, float thickness ) {
+    ImGui::GetWindowDrawList()->AddRect( a, b, color, rounding, rounding_corners_flags, thickness );
+}
+void Draw::ImRect( int x0, int y0, int x1, int y1, ImColor color, float rounding, int rounding_corners_flags, float thickness ){
+    ImGui::GetWindowDrawList()->AddRect( ImVec2(x0, y0), ImVec2(x1, y1), color, rounding, rounding_corners_flags, thickness );
+}
+void Draw::ImRectFilled( int x0, int y0, int x1, int y1, ImColor color, float rounding, int rounding_corners_flags ){
+    ImGui::GetWindowDrawList()->AddRectFilled( ImVec2(x0, y0), ImVec2(x1, y1), color, rounding, rounding_corners_flags );
+}
+void Draw::ImRectFilled( ImVec2 a, ImVec2 b, ImColor color, float rounding, int rounding_corners_flags ){
+    ImGui::GetWindowDrawList()->AddRectFilled( a, b, color, rounding, rounding_corners_flags );
+}
+void Draw::ImLine( ImVec2 a, ImVec2 b, ImColor color, float thickness ) {
+    ImGui::GetWindowDrawList()->AddLine( a, b, color, thickness );
+}
+
+/*void Draw::ImCircle3D( Vector position, int segments, float radius, ImColor color ) {
+    float step = ( float ) M_PI * 2.0f / ( float ) segments;
+
+    for ( float a = 0; a < ( M_PI * 2.0f ); a += step ) {
+
+        Vector start( radius * cosf( a ) + position.x,
+                      radius * sinf( a ) + position.y,
+                      position.z );
+        Vector end( radius * cosf( a + step ) + position.x,
+                    radius * sinf( a + step ) + position.y,
+                    position.z );
+
+        ImVec2 start2d, end2d;
+        if ( !ESP::WorldToScreen( start, &start2d ) || !ESP::WorldToScreen( end, &end2d ) )
+            continue;
+
+        Draw::ImLine( start2d, end2d, color );
+    }
+}*/
+
+void Draw::ImEnd() {
     ImGui::End();
+}
+
+void Draw::AddLine( int x0, int y0, int x1, int y1, ImColor color ) {
+    DrawRequest req = {};
+    req.type = DRAW_LINE;
+    req.x0 = x0;
+    req.y0 = y0;
+    req.x1 = x1;
+    req.y1 = y1;
+    req.color = color;
+	std::lock_guard<std::mutex> guard(m_draw);
+    drawRequests.push_back( req );
+}
+
+void Draw::AddRect( int x0, int y0, int x1, int y1, ImColor color ) {
+    DrawRequest req = {};
+    req.type = DRAW_RECT;
+    req.x0 = x0;
+    req.y0 = y0;
+    req.x1 = x1;
+    req.y1 = y1;
+    req.color = color;
+	std::lock_guard<std::mutex> guard(m_draw);
+    drawRequests.push_back( req );
+}
+
+void Draw::AddRectFilled( int x0, int y0, int x1, int y1, ImColor color ) {
+    DrawRequest req = {};
+    req.type = DRAW_RECT_FILLED;
+    req.x0 = x0;
+    req.y0 = y0;
+    req.x1 = x1;
+    req.y1 = y1;
+    req.color = color;
+	std::lock_guard<std::mutex> guard(m_draw);
+    drawRequests.push_back( req );
+}
+
+void Draw::AddCircle( int x0, int y0, float radius, ImColor color, int segments, float thickness ) {
+    DrawRequest req = {};
+    req.type = DRAW_CIRCLE;
+    req.x0 = x0;
+    req.y0 = y0;
+    req.circleRadius = radius;
+    req.circleSegments = segments;
+    req.thickness = thickness;
+    req.color = color;
+	std::lock_guard<std::mutex> guard(m_draw);
+    drawRequests.push_back( req );
+}
+
+void Draw::AddCircleFilled( int x0, int y0, float radius, ImColor color, int segments ) {
+    DrawRequest req = {};
+    req.type = DRAW_CIRCLE_FILLED;
+    req.x0 = x0;
+    req.y0 = y0;
+    req.circleRadius = radius;
+    req.circleSegments = segments;
+    req.color = color;
+	std::lock_guard<std::mutex> guard(m_draw);
+    drawRequests.push_back( req );
+}
+
+void Draw::AddCircle3D( const Vector &pos3D, float radius, ImColor color, int segments ) {
+    DrawRequest req = {};
+    req.type = DRAW_CIRCLE_3D;
+    req.pos = pos3D;
+    req.circleRadius = radius;
+    req.circleSegments = segments;
+    req.color = color;
+	std::lock_guard<std::mutex> guard(m_draw);
+    drawRequests.push_back( req );
+}
+
+void Draw::AddText( int x0, int y0, const char *text, ImColor color, ImFontFlags flags ) {
+    DrawRequest req = {};
+    if( text ){
+        strncpy( req.text, text, sizeof( req.text ) );
+        req.text[sizeof(req.text) - 1] = '\0';
+    }
+    req.type = DRAW_TEXT;
+    req.x0 = x0;
+    req.y0 = y0;
+    req.color = color;
+    req.fontflags = flags;
+	std::lock_guard<std::mutex> guard(m_draw);
+    drawRequests.push_back( req );
 }

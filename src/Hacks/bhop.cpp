@@ -3,7 +3,7 @@
 
 void BHop::CreateMove(CUserCmd* cmd)
 {
-    if (!cvar->FindVar( "skele_skybox_enabled" )->GetInt())
+    if (!cvar->FindVar( "skele_bhop" )->GetInt())
         return;
 
     static bool bLastJumped = false;

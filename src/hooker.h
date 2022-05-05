@@ -10,6 +10,7 @@
 #include "Utils/vmt.h"
 #include "Utils/util.h"
 #include "interfaces.h"
+#include "glhook.h"
 
 struct dlinfo_t
 {
@@ -21,7 +22,6 @@ struct dlinfo_t
 namespace Hooker
 {
 	bool GetLibraryInformation(const char* library, uintptr_t* address, size_t* size);
-	void InitializeVMHooks();
 	bool HookRecvProp(const char* className, const char* propertyName, std::unique_ptr<RecvPropHook>& recvPropHook);
 	void FindIClientMode();
 	void FindGlobalVars();
@@ -34,7 +34,10 @@ namespace Hooker
 	void FindLoadFromBuffer();
     void FindVstdlibFunctions();
 	void FindOverridePostProcessingDisable();
+    void HookSwapWindow();
+    void HookPollEvent();
 	void FindSDLInput();
 	void FindSetNamedSkybox();
+	void FindLuaSharedFunctions();
 //	void FindPanelArrayOffset();
 }

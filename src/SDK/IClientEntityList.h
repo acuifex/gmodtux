@@ -9,7 +9,7 @@ public:
 	virtual IClientNetworkable* GetClientNetworkableFromHandle(CBaseHandle handle) = 0;
 	virtual IClientUnknown* GetClientUnknownFromHandle(CBaseHandle handle) = 0;
 	// FIXME: GetClientEntity should return an IClientEntity pointer.
-	virtual C_BaseEntity* GetClientEntity(int entindex) = 0;
+	virtual IClientEntity* GetClientEntity(int entindex) = 0;
 	// FIXME: GetClientEntityFromHandle should accept a CBaseHandle.
 	virtual IClientEntity* GetClientEntityFromHandle(void* handle) = 0;
 	virtual int NumberOfEntities(bool include_non_networkable) = 0;

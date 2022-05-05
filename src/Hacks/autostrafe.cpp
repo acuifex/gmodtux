@@ -12,6 +12,7 @@ static void LegitStrafe(C_BasePlayer* localplayer, CUserCmd* cmd)
 
     if (cmd->buttons & IN_FORWARD || cmd->buttons & IN_BACK || cmd->buttons & IN_MOVELEFT || cmd->buttons & IN_MOVERIGHT)
         return;
+    static float cl_sidespeed = cvar->FindVar("cl_sidespeed")->GetFloat();
 
     if (cmd->mousedx <= 1 && cmd->mousedx >= -1)
         return;
@@ -19,7 +20,13 @@ static void LegitStrafe(C_BasePlayer* localplayer, CUserCmd* cmd)
     switch (type)
     {
         case AutostrafeType::AS_FORWARDS:
-            cmd->sidemove = cmd->mousedx < 0.f ? -450.f : 450.f;
+            if(cmd->mousedx < 0.f){
+                cmd->sidemove = -cl_sidespeed;
+                cmd->buttons |= IN_MOVELEFT;
+            } else {
+                cmd->sidemove = cl_sidespeed;
+                cmd->buttons |= IN_MOVERIGHT;
+            }
             break;
         case AutostrafeType::AS_BACKWARDS:
             cmd->sidemove = cmd->mousedx < 0.f ? 450.f : -450.f;
@@ -82,7 +89,7 @@ static void RageStrafe(C_BasePlayer* localplayer, CUserCmd* cmd)
 
 void AutoStrafe::CreateMove(CUserCmd* cmd)
 {
-    if(!(bool)cvar->FindVar( "skele_disable_pp" )->GetInt())
+    if(!(bool)cvar->FindVar( "skele_autostrafe" )->GetInt())
         return;
 
     C_BasePlayer* localplayer = (C_BasePlayer*) entityList->GetClientEntity(engine->GetLocalPlayer());

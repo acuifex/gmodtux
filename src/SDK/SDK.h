@@ -43,3 +43,4 @@
 #include "KeyValues.h"
 #include "ICommandLine.h"
 #include "CBaseClientState.h"
+#include "CLuaInterface.h"

@@ -13,27 +13,28 @@ typedef void (*BeginFrameFn) (void*, float);
 typedef bool (*CreateMoveFn) (void*, float, CUserCmd*);
 typedef void (*PaintFn) (void*, PaintMode_t);
 typedef void (*LockCursorFn) (void*);
-typedef void (*ShowPixelsFn) (void*, CShowPixelsParams*);
 
-
-namespace Hooks
-{
+namespace Hooks {
 	void FrameStageNotify(void* thisptr, ClientFrameStage_t stage);
 	void SetKeyCodeState(void* thisptr, ButtonCode_t code, bool bPressed);
 	void BeginFrame(void* thisptr, float frameTime);
 	bool ShouldDrawFog(void* thisptr);
-    bool CreateMove(void* thisptr, float flInputSampleTime, CUserCmd* cmd);
-
+	bool CreateMove(void* thisptr, float flInputSampleTime, CUserCmd* cmd);
 	void LockCursor(void* thisptr);
-
 	void Paint(void* thisptr, PaintMode_t mode);
-    void ShowPixels(void *thisptr, CShowPixelsParams *params);
+	void PaintImGui(); // Draw with ImGui.
 }
 
 namespace CreateMove
 {
-	inline bool sendPacket;
-	inline QAngle lastTickViewAngles;
+    extern bool sendPacket;
+//    extern QAngle lastTickViewAngles;
+}
+
+namespace Paint
+{
+    extern int engineWidth; // updated in paint.
+    extern int engineHeight;
 }
 
 namespace OverrideView

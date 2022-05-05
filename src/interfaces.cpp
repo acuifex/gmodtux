@@ -22,9 +22,9 @@ void Interfaces::FindInterfaces()
 	gameMovement = GetInterface<IGameMovement>("./bin/linux64/client_client.so", "GameMovement");
 	engineVGui = GetInterface<IEngineVGui>("./bin/linux64/engine_client.so", "VEngineVGui");
 	sound = GetInterface<IEngineSound>("./bin/linux64/engine_client.so", "IEngineSoundClient");
+	luaShared = GetInterface<CLuaShared>("./bin/linux64/lua_shared_client.so", "LUASHARED003", true);
 //	localize = GetInterface<ILocalize>("./bin/linux64/localize_client.so", "Localize_");
 //	commandline = GetSymbolAddress<CommandLineFn>("./bin/linux64/libtier0_client.so", "CommandLine")();
-//	panoramaEngine = GetInterface<IPanoramaUIEngine>("./bin/linux64/panorama_client.so", "PanoramaUIEngine001", true);
 
 }
 

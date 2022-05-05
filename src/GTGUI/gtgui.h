@@ -4,18 +4,18 @@
 #include "../ImGUI/imgui.h"
 #include "../ImGUI/imgui_internal.h"
 #include "../ImGUI/imgui_impl_sdl.h"
-#include "../settings.h"
 //#include "../Hacks/hacks.h"
+#include "../settings.h"
 #include "imgui.h"
 #include "Windows/main.h"
-#include "Tabs/visualstab.h"
+#include "Tabs/misctab.h"
 
 namespace UI
 {
     extern bool isVisible;
 
     void SetVisible(bool visible);
-    void WaterMark( );
+    void WaterMark();
     void SetupColors();
     void SetupWindows();
     bool ColorPicker(float* col, bool alphabar);

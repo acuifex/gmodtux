@@ -2,7 +2,7 @@
 
 #include "../gtgui.h"
 
-namespace Visuals
+namespace Misc
 {
     void RenderTab();
 }

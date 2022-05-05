@@ -39,6 +39,8 @@ typedef float (*RandomFloatExpFn)(float, float, float);
 typedef int (*RandomIntFn)(int, int);
 typedef float (*RandomGaussianFloatFn)(float, float);
 typedef bool (*SetNamedSkyBoxFn)(const char*);
+typedef int (*luaL_loadfileFn)(void *state, const char *filename);
+typedef int (*lua_pcallFn)(void *state, int nargs, int nresults, int errfunc);
 
 enum class TeamID : int
 {
@@ -199,6 +201,8 @@ enum class ItemDefinitionIndex : int
 	GLOVE_SPECIALIST = 5034
 };
 
+// TODO: dump all of the class ids
+// GetAllClasses returns base to the linked list
 enum class EClassIds : int
 {
 	CAI_BaseNPC = 0,

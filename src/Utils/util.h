@@ -17,4 +17,6 @@ namespace Util
 {
 	std::wstring StringToWstring(std::string str);
 	long GetEpochTime();
+	std::string ToLower(std::string str);
+	std::string ToUpper(std::string str);
 }

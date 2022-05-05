@@ -2,6 +2,12 @@
 
 RecvVarProxyFn fnSequenceProxyFn;
 
+uintptr_t oSwapWindow;
+uintptr_t* swapWindowJumpAddress = nullptr;
+
+uintptr_t oPollEvent;
+uintptr_t* polleventJumpAddress = nullptr;
+
 StartDrawingFn StartDrawing;
 FinishDrawingFn FinishDrawing;
 
@@ -39,17 +45,6 @@ bool Hooker::GetLibraryInformation(const char* library, uintptr_t* address, size
 	}
 
 	return false;
-}
-
-void Hooker::InitializeVMHooks()
-{
-	panelVMT = new VMT(panel);
-	clientVMT = new VMT(client);
-	inputInternalVMT = new VMT(inputInternal);
-	materialVMT = new VMT(material);
-	surfaceVMT = new VMT(surface);
-//	launcherMgrVMT = new VMT(launcherMgr);
-	engineVGuiVMT = new VMT(engineVGui);
 }
 
 bool Hooker::HookRecvProp(const char* className, const char* propertyName, std::unique_ptr<RecvPropHook>& recvPropHook)
@@ -208,6 +203,23 @@ void Hooker::FindOverridePostProcessingDisable()
     s_bOverridePostProcessingDisable = reinterpret_cast<bool*>(bool_address);
 }
 
+void Hooker::HookSwapWindow()
+{
+    uintptr_t swapwindowFn = reinterpret_cast<uintptr_t>(dlsym(RTLD_NEXT, "SDL_GL_SwapWindow"));
+    swapWindowJumpAddress = reinterpret_cast<uintptr_t*>(GetAbsoluteAddress(swapwindowFn, 3, 7));
+    oSwapWindow = *swapWindowJumpAddress;
+    *swapWindowJumpAddress = reinterpret_cast<uintptr_t>(&SDL2::SwapWindow);
+}
+
+void Hooker::HookPollEvent()
+{
+    uintptr_t polleventFn = reinterpret_cast<uintptr_t>(dlsym(RTLD_NEXT, "SDL_PollEvent"));
+    polleventJumpAddress = reinterpret_cast<uintptr_t*>(GetAbsoluteAddress(polleventFn, 3, 7));
+    oPollEvent = *polleventJumpAddress;
+    *polleventJumpAddress = reinterpret_cast<uintptr_t>(&SDL2::PollEvent);
+}
+
+
 void Hooker::FindSDLInput()
 {
     /*
@@ -215,15 +227,12 @@ void Hooker::FindSDLInput()
         E8 E2 B7 FF FF          call    _memcpy
         E8 FD D8 02 00          call    LauncherMgrCreateFunc <------
      */
-    uintptr_t startAddr = PatternFinder::FindPatternInModule("launcher_client.so",
-                                                             (unsigned char*) "\x0F\x95\x83"
-                                                                                             "\x00\x00\x00\x00"
-                                                                                             "\xE8"
-                                                                                             "\x00\x00\x00\x00"
-                                                                                             "\xE8",
-                                                             "xxx????x????x");
-    ILauncherMgrCreateFn createFunc = reinterpret_cast<ILauncherMgrCreateFn>(GetAbsoluteAddress(startAddr + 12, 1, 5));
-    launcherMgr = createFunc();
+	// TODO: check this pattern some time later
+    // 55 48 89 e5 53 48 89 fb 48 83 ec 08 48 89 f7
+    uintptr_t func_address = PatternFinder::FindPatternInModule("launcher_client.so",
+                                                             (unsigned char*) "\x48\x8B\x05\x00\x00\x00\x00\x48\x85\xC0\x74\x00\xF3\xC3",
+                                                             "xxx????xxxx?xx");
+    launcherMgr = reinterpret_cast<ILauncherMgrCreateFn>(func_address)();
 }
 
 void Hooker::FindSetNamedSkybox() {
@@ -236,6 +245,16 @@ void Hooker::FindSetNamedSkybox() {
                                                                 "xxxx????xxxx");
 
     SetNamedSkyBox = reinterpret_cast<SetNamedSkyBoxFn>(func_address);
+}
+
+void Hooker::FindLuaSharedFunctions()
+{
+    void* handle = dlopen("./bin/linux64/lua_shared_client.so", RTLD_NOLOAD | RTLD_NOW);
+    
+    luaL_loadfile = reinterpret_cast<luaL_loadfileFn>(dlsym(handle, "luaL_loadfile"));
+    lua_pcall = reinterpret_cast<lua_pcallFn>(dlsym(handle, "lua_pcall"));
+
+    dlclose(handle);
 }
 
 //void Hooker::FindPanelArrayOffset()

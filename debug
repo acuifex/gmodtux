@@ -28,7 +28,6 @@ if grep -q "$filename" /proc/"$csgo_pid"/maps; then
     (sudo echo -e "continue\\n"; cat) | sudo gdb -p "$csgo_pid"
 else
     echo "Injecting build $filename"
-    sudo cp "$filename" /"$filename"
-    (sudo echo -e "set confirm off\\nset \$dlopen = (void*(*)(char*, int)) dlopen\\ncall \$dlopen(\"/$filename\", 1)\\n"; cat) | sudo gdb -p "$csgo_pid"
-    sudo rm /"$filename"
+    # TODO: make this at least kinda proper
+    sudo gdb -x "inject.txt" -p "$csgo_pid"
 fi
