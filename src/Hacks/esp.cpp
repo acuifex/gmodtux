@@ -10,13 +10,13 @@ void DrawEntity(C_BaseEntity* entity, const char* str)
 {
 	Vector screenPos;
 	Vector pos = entity->GetVecOrigin();
-	cvar->ConsoleDPrintf("%s\n", str);
-	cvar->ConsoleDPrintf("pos: %f, %f, %f\n", pos.x, pos.y, pos.z);
+	// cvar->ConsoleDPrintf("%s\n", str);
+	// cvar->ConsoleDPrintf("pos: %f, %f, %f\n", pos.x, pos.y, pos.z);
 	
 	if (debugOverlay->ScreenPosition( pos, screenPos ))
 		return;
 	
-	cvar->ConsoleDPrintf("scrpos: %f, %f, %f\n", screenPos.x, screenPos.y, screenPos.z);
+	// cvar->ConsoleDPrintf("scrpos: %f, %f, %f\n", screenPos.x, screenPos.y, screenPos.z);
 	
 	Draw::AddText(screenPos.x, screenPos.y, str, ImColor(0,0,255));
 }

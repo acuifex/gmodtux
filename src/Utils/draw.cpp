@@ -1,5 +1,6 @@
 #include "draw.h"
 
+#include <SDL.h>
 
 std::deque<DrawRequest> Draw::drawRequests = {};
 std::mutex Draw::m_draw;
@@ -179,14 +180,15 @@ void Draw::ImStart() {
     int width, height;
     SDL_GetWindowSize( SDL_GL_GetCurrentWindow(), &width, &height );
 
-    ImGui::SetNextWindowPos( ImVec2( 0, 0 ), ImGuiSetCond_Always );
-    ImGui::SetNextWindowSize( ImVec2( width, height ), ImGuiSetCond_Always );
-    ImGui::Begin( "",
+    ImGui::SetNextWindowPos( ImVec2( 0, 0 ), ImGuiCond_Always );
+    ImGui::SetNextWindowSize( ImVec2( width, height ), ImGuiCond_Always );
+    ImGui::Begin( "##gmodtux",
                   ( bool* ) true,
-                  ImVec2( width, height ),
-                  0.f,
-                  ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove |
-                  ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoInputs );
+                  ImGuiWindowFlags_NoMove |
+				  ImGuiWindowFlags_NoDecoration |
+				  ImGuiWindowFlags_NoSavedSettings |
+				  ImGuiWindowFlags_NoInputs |
+				  ImGuiWindowFlags_NoBackground);
 }
 
 void Draw::ImText( ImVec2 pos, ImColor color, const char* text_begin, const char* text_end, float wrap_width,

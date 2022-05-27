@@ -20,6 +20,7 @@ void Hooks::Paint(void* thisptr, PaintMode_t mode)
 	// TODO: check these function indexes
 	engine->GetScreenSize(Paint::engineWidth,Paint::engineHeight );
 	
+	// TODO: add screenshot spoofer
 	if (Settings::ScreenshotCleaner::enabled && engine->IsTakingScreenshot()) {
 		cvar->ConsoleColorPrintf(ColorRGBA(255, 0, 0), "Taking a screenshot\n");
 		return;

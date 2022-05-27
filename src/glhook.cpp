@@ -5,9 +5,11 @@
 #include "GTGUI/gtgui.h"
 #include "GTGUI/SegoeUI.h"
 #include "Hooks/hooks.h"
-#include "ImGUI/fonts/KaiGenGothicCNRegular.h"
+// #include "ImGUI/fonts/KaiGenGothicCNRegular.h"
+#include "ImGUI/backends/imgui_impl_opengl2.h"
 #include "Utils/draw.h"
-#include "ImGUI/imgui_internal.h"
+
+#include <SDL.h>
 
 SDL_GLContext context = nullptr;
 
@@ -20,43 +22,39 @@ void SDL2::SwapWindow(SDL_Window* window)
     if (!context)
     {
         context = SDL_GL_CreateContext(window);
-        ImGui_ImplSdl_Init(window);
-
-        ImWchar SegoeUI_ranges[] = {
-                0x0020, 0x007E, // Basic Latin
-                0x00A0, 0x00FF, // Latin-1 Supplement
-                0x0100, 0x017F, // Latin Extended-A
-                0x0180, 0x024F, // Latin Extended-B
-                0x0370, 0x03FF, // Greek and Coptic
-                0x0400, 0x04FF, // Cyrillic
-                0x0500, 0x052F, // Cyrillic Supplementary
-                0
-        };
-
-
-        ImWchar KaiGenGothicCNRegular_ranges[] = {
-                0x3000, 0x30FF, // Punctuations, Hiragana, Katakana
-                0x31F0, 0x31FF, // Katakana Phonetic Extensions
-                0xFF00, 0xFFEF, // Half-width characters
-                0x4E00, 0x9FAF, // CJK Ideograms
-                0
-        };
-
-        ImGuiIO& io = ImGui::GetIO();
-        ImFontConfig config;
-
-        // Add SegoeUI as default font
-        io.Fonts->AddFontFromMemoryCompressedTTF(SegoeUI_compressed_data, SegoeUI_compressed_size, 18.0f, &config, SegoeUI_ranges);
-
-        // Enable MergeMode and add additional fonts
-        config.MergeMode = true;
-        io.Fonts->AddFontFromMemoryCompressedBase85TTF(KaiGenGothicCNRegular_compressed_data_base85, 14.0f, &config, KaiGenGothicCNRegular_ranges);
-        io.Fonts->Build();
+	    ImGui::CreateContext();
+	    // wrapper around ImGui_ImplSDL2_Init
+	    ImGui_ImplSDL2_InitForOpenGL(window, context);
+	    ImGui_ImplOpenGL2_Init();
+	
+	    ImWchar SegoeUI_ranges[] = {
+			    0x0020, 0x007E, // Basic Latin
+			    0x00A0, 0x00FF, // Latin-1 Supplement
+			    0x0100, 0x017F, // Latin Extended-A
+			    0x0180, 0x024F, // Latin Extended-B
+			    0x0370, 0x03FF, // Greek and Coptic
+			    0x0400, 0x04FF, // Cyrillic
+			    0x0500, 0x052F, // Cyrillic Supplementary
+			    0
+	    };
+		
+	    ImGuiIO& io = ImGui::GetIO();
+	    ImFontConfig config;
+	
+	    // Add SegoeUI as default font
+	    io.Fonts->AddFontFromMemoryCompressedTTF(SegoeUI_compressed_data, SegoeUI_compressed_size, 18.0f, &config, SegoeUI_ranges);
+	
+	    // Enable MergeMode and add additional fonts
+	    config.MergeMode = true;
+		config.GlyphOffset = ImVec2(0.f, 0.f);
+	    io.Fonts->Build();
     }
 
     SDL_GL_MakeCurrent(window, context);
-
-    ImGui_ImplSdl_NewFrame(window);
+	
+	ImGui_ImplOpenGL2_NewFrame();
+	ImGui_ImplSDL2_NewFrame();
+	ImGui::NewFrame();
 
     ImGui::GetIO().MouseDrawCursor = UI::isVisible;
     ImGui::GetIO().WantCaptureMouse = UI::isVisible;
@@ -68,10 +66,10 @@ void SDL2::SwapWindow(SDL_Window* window)
 
         while (SDL_PollEvent(&event))
         {
-            if (event.type == SDL_QUIT)
-                return;
-
-            ImGui_ImplSdl_ProcessEvent(&event);
+	        if (event.type == SDL_QUIT)
+		        return;
+	
+	        ImGui_ImplSDL2_ProcessEvent(&event);
         }
     }
 
@@ -83,9 +81,9 @@ void SDL2::SwapWindow(SDL_Window* window)
     UI::SetupColors();
     UI::SetupWindows();
 
-    ImGui::GetCurrentContext()->Font->DisplayOffset = ImVec2(0.f, 0.f);
-
     ImGui::Render();
+	// i hope opengl2 renderer is the correct one.
+	ImGui_ImplOpenGL2_RenderDrawData(ImGui::GetDrawData());
 
     SDL_GL_MakeCurrent(window, original_context);
     oSDL_GL_SwapWindow(window);
@@ -94,6 +92,10 @@ void SDL2::SwapWindow(SDL_Window* window)
 void SDL2::UnhookWindow()
 {
     *swapWindowJumpAddress = oSwapWindow;
+	
+	ImGui_ImplOpenGL2_Shutdown();
+	ImGui_ImplSDL2_Shutdown();
+	ImGui::DestroyContext();
 
     SDL_GL_DeleteContext(context);
 }

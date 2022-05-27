@@ -94,6 +94,15 @@ namespace Settings
                 extern bool open;
                 extern bool reload; // True on config load, used to change Window Position.
             }
+            namespace Colors
+            {
+                extern int posX;
+                extern int posY;
+                extern int sizeX;
+                extern int sizeY;
+                extern bool open;
+                extern bool reload; // True on config load, used to change Window Position.
+            }
         }
         namespace Fonts
         {

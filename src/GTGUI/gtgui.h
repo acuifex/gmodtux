@@ -3,12 +3,9 @@
 #include <list>
 #include "../ImGUI/imgui.h"
 #include "../ImGUI/imgui_internal.h"
-#include "../ImGUI/imgui_impl_sdl.h"
-//#include "../Hacks/hacks.h"
-#include "../settings.h"
+#include "../ImGUI/backends/imgui_impl_sdl.h"
 #include "imgui.h"
-#include "Windows/main.h"
-#include "Tabs/misctab.h"
+#include "../settings.h"
 
 namespace UI
 {

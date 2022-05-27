@@ -206,6 +206,8 @@ void Hooker::FindOverridePostProcessingDisable()
 void Hooker::HookSwapWindow()
 {
     uintptr_t swapwindowFn = reinterpret_cast<uintptr_t>(dlsym(RTLD_NEXT, "SDL_GL_SwapWindow"));
+	// TODO: some people have different offsets for some reason.
+	// steam isn't pinning libsdl for gmod?
     swapWindowJumpAddress = reinterpret_cast<uintptr_t*>(GetAbsoluteAddress(swapwindowFn, 3, 7));
     oSwapWindow = *swapWindowJumpAddress;
     *swapWindowJumpAddress = reinterpret_cast<uintptr_t>(&SDL2::SwapWindow);

@@ -36,9 +36,21 @@ endif(NOT CMAKE_BUILD_TYPE)
 
 file(GLOB_RECURSE SOURCE_FILES "${CMAKE_SOURCE_DIR}/src/*.cpp")
 EXCLUDE_FILES_FROM_DIR_IN_LIST("${SOURCE_FILES}" "${CMAKE_SOURCE_DIR}/src/ImGUI/examples/" FALSE)
-EXCLUDE_FILES_FROM_DIR_IN_LIST("${SOURCE_FILES}" "${CMAKE_SOURCE_DIR}/src/ImGUI/extra_fonts" FALSE)
+EXCLUDE_FILES_FROM_DIR_IN_LIST("${SOURCE_FILES}" "${CMAKE_SOURCE_DIR}/src/ImGUI/backends/" FALSE)
+EXCLUDE_FILES_FROM_DIR_IN_LIST("${SOURCE_FILES}" "${CMAKE_SOURCE_DIR}/src/ImGUI/misc/" FALSE)
+
+list(APPEND SOURCE_FILES "${CMAKE_SOURCE_DIR}/src/ImGUI/backends/imgui_impl_sdl.cpp")
+list(APPEND SOURCE_FILES "${CMAKE_SOURCE_DIR}/src/ImGUI/backends/imgui_impl_opengl2.cpp")
 
 include_directories(${INCLUDE_DIRS})
 
+include_directories("${CMAKE_SOURCE_DIR}/src/ImGUI/")
+#include_directories("${CMAKE_SOURCE_DIR}/src/ImGUI/backends/")
+
+find_package(SDL2 REQUIRED)
+include_directories(${SDL2_INCLUDE_DIRS})
+
+add_definitions("-DImDrawIdx=unsigned int")
+
 add_library(skeletux SHARED ${SOURCE_FILES})
-target_link_libraries(skeletux SDL2 GL dl)
+target_link_libraries(skeletux ${SDL2_LIBRARIES} GL dl)
