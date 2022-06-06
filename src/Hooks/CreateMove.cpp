@@ -1,7 +1,6 @@
 #include "hooks.h"
 
 #include "../Hacks/bhop.h"
-#include "../Hacks/luaload.h"
 #include "../Hacks/autostrafe.h"
 
 bool CreateMove::sendPacket = true;
@@ -18,7 +17,6 @@ bool Hooks::CreateMove(void* thisptr, float flInputSampleTime, CUserCmd* cmd)
         // CreateMove::sendPacket = true;
 
         // BHop::CreateMove(cmd);
-        // LuaLoad::CreateMove(cmd);
         // AutoStrafe::CreateMove(cmd);
 
 //        *sendPacket = CreateMove::sendPacket;

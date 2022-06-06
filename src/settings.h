@@ -70,6 +70,11 @@ namespace Settings
 	{
         extern bool enabled;
 	}
+	
+	namespace Bhop
+	{
+        extern bool enabled;
+	}
 
 	namespace ScreenshotCleaner
 	{
