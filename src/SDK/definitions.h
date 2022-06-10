@@ -5,6 +5,7 @@
 
 #include <unordered_map>
 #include <map>
+#include <string>
 
 /* generic constants */
 #define LIFE_ALIVE 0
