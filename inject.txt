@@ -1,3 +1,0 @@
-set confirm off
-set $dlopen = (void*(*)(char*, int)) dlopen
-call $dlopen("/home/acuifex/Projects/gmodtux/libskeletux.so", 1)
