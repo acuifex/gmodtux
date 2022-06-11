@@ -2,7 +2,7 @@
 
 gdb="$(dirname "$0")/gdb" # For using a gdb build such as the cathook one (The one included)
 libname="libgamemodeauto.so.0" # Pretend to be gamemode, change this to another lib that may be in /maps (if already using real gamemode, I'd suggest using libMangoHud.so)
-csgo_pid=$(pidof gmod)
+gmod_pid=$(pidof gmod)
 
 # Set to true to compile with clang. (if changing to true, make sure to delete the build directory from gcc)
 export USE_CLANG="false"
@@ -18,8 +18,8 @@ mkdir -p --mode=000 /tmp/dumps
 function unload {
     echo "Unloading cheat..."
     echo 0 | sudo tee /proc/sys/kernel/yama/ptrace_scope
-    if grep -q "$libname" "/proc/$csgo_pid/maps"; then
-        $gdb -n -q -batch -ex "attach $csgo_pid" \
+    if grep -q "$libname" "/proc/$gmod_pid/maps"; then
+        $gdb -n -q -batch -ex "attach $gmod_pid" \
             -ex "set \$dlopen = (void*(*)(char*, int)) dlopen" \
             -ex "set \$dlclose = (int(*)(void*)) dlclose" \
             -ex "set \$library = \$dlopen(\"/usr/lib/$libname\", 6)" \
@@ -38,7 +38,7 @@ function load {
     gdbOut=$(
       $gdb -n -q -batch \
       -ex "set auto-load safe-path /usr/lib/" \
-      -ex "attach $csgo_pid" \
+      -ex "attach $gmod_pid" \
       -ex "set \$dlopen = (void*(*)(char*, int)) dlopen" \
       -ex "call \$dlopen(\"/usr/lib/$libname\", 1)" \
       -ex "detach" \
@@ -57,12 +57,12 @@ function load_debug {
     sudo cp libskeletux.so /usr/lib/$libname
     $gdb -n -q -batch \
         -ex "set auto-load safe-path /usr/lib:/usr/lib/" \
-        -ex "attach $csgo_pid" \
+        -ex "attach $gmod_pid" \
         -ex "set \$dlopen = (void*(*)(char*, int)) dlopen" \
         -ex "call \$dlopen(\"/usr/lib/$libname\", 1)" \
         -ex "detach" \
         -ex "quit"
-    $gdb -p "$csgo_pid"
+    $gdb -p "$gmod_pid"
 }
 
 function build {
@@ -94,7 +94,7 @@ case $keys in
     -h|--help)
         echo "
  help
-Toolbox script for gamesneeze the beste lincuck cheat 2021
+Toolbox script for gmodtux the beste lincuck cheat 2021
 =======================================================================
 | Argument             | Description                                  |
 | -------------------- | -------------------------------------------- |
@@ -106,8 +106,8 @@ Toolbox script for gamesneeze the beste lincuck cheat 2021
 =======================================================================
 
 All args are executed in the order they are written in, for
-example, \"-p -u -b -l\" would update the cheat, then unload, then build it, and
-then load it back into csgo.
+example, \"-u -b -l\" would unload, then build it, and
+then load it back into gmod.
 "
         exit
         ;;
