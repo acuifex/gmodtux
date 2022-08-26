@@ -50,6 +50,11 @@ void MainThread() {
 	engineVGuiVMT->HookVM( Hooks::Paint, 14 );
 	engineVGuiVMT->ApplyVMT();
 	
+	// GetRenderContext changes between calls.......
+	matRenderContextVMT = new VMT(material->GetRenderContext());
+	matRenderContextVMT->HookVM( Hooks::ReadPixels, 11 );
+	matRenderContextVMT->ApplyVMT();
+	
 //	materialVMT = new VMT(material); // good?
 //	materialVMT->HookVM( Hooks::BeginFrame, 42 );
 //	materialVMT->ApplyVMT();
@@ -89,6 +94,7 @@ void __attribute__((destructor)) Shutdown() {
 	// clientVMT->ReleaseVMT();
 	// clientModeVMT->ReleaseVMT();
 	engineVGuiVMT->ReleaseVMT();
+	matRenderContextVMT->ReleaseVMT();
 	
 	// *s_bOverridePostProcessingDisable = false;
 	

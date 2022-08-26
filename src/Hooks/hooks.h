@@ -22,6 +22,7 @@ namespace Hooks {
 	bool CreateMove(void* thisptr, float flInputSampleTime, CUserCmd* cmd);
 	void LockCursor(void* thisptr);
 	void Paint(void* thisptr, PaintMode_t mode);
+	void ReadPixels(void* thisptr, int x, int y, int width, int height, unsigned char *data, ImageFormat dstFormat);
 	void PaintImGui(); // Draw with ImGui.
 }
 

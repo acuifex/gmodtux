@@ -46,6 +46,7 @@ inline VMT* materialVMT;
 inline VMT* surfaceVMT;
 inline VMT* launcherMgrVMT;
 inline VMT* engineVGuiVMT;
+inline VMT* matRenderContextVMT;
 
 inline InitKeyValuesFn InitKeyValues;
 inline LoadFromBufferFn LoadFromBuffer;

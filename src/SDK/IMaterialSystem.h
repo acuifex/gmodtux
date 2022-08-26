@@ -117,9 +117,12 @@ public:
 		typedef IMaterial* (* oGetMaterial)(void*, MaterialHandle_t);
 		return getvfunc<oGetMaterial>(this, 89)(this, h);
 	}
-
+	
+	// xref "render.Capture" in client_client.so
+	// look slightly bellow string "format" in this function
+	// btw IMatRenderContext is part of IMaterialSystem, currently it's at offset 0x24f0
 	IMatRenderContext* GetRenderContext() {
 		typedef IMatRenderContext* (* oGetRenderContext)( void* );
-		return getvfunc<oGetRenderContext>( this, 115 )( this );
+		return getvfunc<oGetRenderContext>( this, 102 )( this ); // 0x330/8
 	}
 };
